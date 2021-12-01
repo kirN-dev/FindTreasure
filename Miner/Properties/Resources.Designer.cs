@@ -69,5 +69,15 @@ namespace Miner.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pixel_treasure_chest {
+            get {
+                object obj = ResourceManager.GetObject("pixel_treasure_chest", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

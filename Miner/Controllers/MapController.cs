@@ -12,12 +12,14 @@ namespace Miner.Controllers
 	public static class MapController
 	{
 		public static event Action<int> OnDig;
+		public static event Action<int> OnFindTreasure;
 
 		public const int mapSize = 8;
 		public const int cellSize = 50;
 
 		private static int currentPictureToSet = 0;
 		private static int digCount = 10;
+		private static int treasureCount;
 
 		public static int[,] map = new int[mapSize, mapSize];
 
@@ -29,12 +31,13 @@ namespace Miner.Controllers
 
 		private static Point firstCoord;
 
-		public static Form form;
+		public static Form mainForm;
+		public static Panel panel;
 
 		private static void ConfigureMapSize(Form current)
 		{
-			current.Width = mapSize * cellSize + 120;
-			current.Height = (mapSize + 1) * cellSize;
+			current.Width = mapSize * cellSize + 150;
+			current.Height = (mapSize + 1) * cellSize + 20;
 		}
 
 		private static void InitMap()
@@ -48,18 +51,22 @@ namespace Miner.Controllers
 			}
 		}
 
-		public static void Init(Form current)
+		public static void Init(Form form, Panel current)
 		{
-			form = current;
+			mainForm = form;
+			panel = current;
+			digCount = 10;
+			OnDig?.Invoke(digCount);
+			OnFindTreasure?.Invoke(-1);
 			currentPictureToSet = 0;
 			isFirstStep = true;
 			spriteSet = new Bitmap(Path.Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.FullName.ToString(), "Sprites\\tiles.png"));
-			ConfigureMapSize(current);
+			ConfigureMapSize(form);
 			InitMap();
 			InitButtons(current);
 		}
 
-		private static void InitButtons(Form current)
+		private static void InitButtons(Panel current)
 		{
 			Random random = new Random();
 			for (int i = 0; i < mapSize; i++)
@@ -137,19 +144,30 @@ namespace Miner.Controllers
 
 			if (map[iButton, jButton] == -1)
 			{
-				
-				
+				OnFindTreasure(--treasureCount);
 			}
 
 			OnDig?.Invoke(--digCount);
 
+			if (treasureCount == 0)
+			{
+				MessageBox.Show("Победа!");
+				Reset();
+				return;
+			}
+
 			if (digCount == 0)
 			{
-				ShowAllTresure(iButton, jButton);
 				MessageBox.Show("Поражение! Лопаты кончились");
-				form.Controls.Clear();
-				Init(form);
+				ShowAllTresure(iButton, jButton);
+				Reset();
 			}
+		}
+
+		private static void Reset()
+		{
+			panel.Controls.Clear();
+			Init(mainForm, panel);
 		}
 
 		private static void ShowAllTresure(int iBomb, int jBomb)
@@ -180,8 +198,8 @@ namespace Miner.Controllers
 		private static void SetTreasure()
 		{
 			Random r = new Random();
-			int number = r.Next(5, 9);
-
+			int number = treasureCount = r.Next(5, 9);
+			OnFindTreasure?.Invoke(treasureCount);
 			for (int i = 0; i < number; i++)
 			{
 				int posI = r.Next(0, mapSize - 1);

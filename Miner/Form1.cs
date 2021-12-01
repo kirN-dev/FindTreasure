@@ -19,13 +19,27 @@ namespace Miner
 
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
-            MapController.Init(this);
+			this.Text = "Кладоискатель";
+
+            MapController.Init(this, panel1);
 			MapController.OnDig += MapController_OnDig;
+			MapController.OnFindTreasure += MapController_OnFindTreasure; 
         }
 
-		private void MapController_OnDig(int obj)
+		private void MapController_OnFindTreasure(int treasureCount)
 		{
-			label
+			if (treasureCount == -1)
+			{
+				label2.Text = "?";
+				return;
+			}
+
+			label2.Text = treasureCount.ToString();
+		}
+
+		private void MapController_OnDig(int shovelCount)
+		{
+            label1.Text = shovelCount.ToString();
 		}
 	}
 }
