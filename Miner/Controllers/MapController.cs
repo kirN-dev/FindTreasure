@@ -11,6 +11,8 @@ namespace Miner.Controllers
 {
 	public static class MapController
 	{
+		public static event Action<int> OnDig;
+
 		public const int mapSize = 8;
 		public const int cellSize = 50;
 
@@ -139,7 +141,7 @@ namespace Miner.Controllers
 				
 			}
 
-			digCount--;
+			OnDig?.Invoke(--digCount);
 
 			if (digCount == 0)
 			{

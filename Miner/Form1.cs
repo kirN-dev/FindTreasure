@@ -18,6 +18,12 @@ namespace Miner
             InitializeComponent();
 
             MapController.Init(this);
+			MapController.OnDig += MapController_OnDig;
         }
-    }
+
+		private void MapController_OnDig(int obj)
+		{
+			label
+		}
+	}
 }
