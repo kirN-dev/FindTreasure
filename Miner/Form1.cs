@@ -17,6 +17,8 @@ namespace Miner
         {
             InitializeComponent();
 
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             MapController.Init(this);
 			MapController.OnDig += MapController_OnDig;
         }

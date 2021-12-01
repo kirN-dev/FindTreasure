@@ -33,7 +33,7 @@ namespace Miner.Controllers
 
 		private static void ConfigureMapSize(Form current)
 		{
-			current.Width = mapSize * cellSize + 20;
+			current.Width = mapSize * cellSize + 120;
 			current.Height = (mapSize + 1) * cellSize;
 		}
 
@@ -128,8 +128,8 @@ namespace Miner.Controllers
 			if (isFirstStep)
 			{
 				firstCoord = new Point(jButton, iButton);
-				SetTresure();
-				CountCellTresure();
+				SetTreasure();
+				CountCellTreasure();
 				isFirstStep = false;
 			}
 
@@ -146,7 +146,7 @@ namespace Miner.Controllers
 			if (digCount == 0)
 			{
 				ShowAllTresure(iButton, jButton);
-				MessageBox.Show("Поражение!");
+				MessageBox.Show("Поражение! Лопаты кончились");
 				form.Controls.Clear();
 				Init(form);
 			}
@@ -177,17 +177,19 @@ namespace Miner.Controllers
 			return image;
 		}
 
-		private static void SetTresure()
+		private static void SetTreasure()
 		{
 			Random r = new Random();
-			int number = r.Next(7, 15);
+			int number = r.Next(5, 9);
 
 			for (int i = 0; i < number; i++)
 			{
 				int posI = r.Next(0, mapSize - 1);
 				int posJ = r.Next(0, mapSize - 1);
 
-				while (map[posI, posJ] == -1 || (Math.Abs(posI - firstCoord.Y) <= 1 && Math.Abs(posJ - firstCoord.X) <= 1))
+				while (map[posI, posJ] == -1 ||
+					(Math.Abs(posI - firstCoord.Y) <= 1 &&
+					Math.Abs(posJ - firstCoord.X) <= 1))
 				{
 					posI = r.Next(0, mapSize - 1);
 					posJ = r.Next(0, mapSize - 1);
@@ -196,7 +198,7 @@ namespace Miner.Controllers
 			}
 		}
 
-		private static void CountCellTresure()
+		private static void CountCellTreasure()
 		{
 			for (int i = 0; i < mapSize; i++)
 			{
